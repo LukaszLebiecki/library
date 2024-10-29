@@ -6,47 +6,27 @@ public class Library {
     private int publicationsNumber = 0;
     private Publication[] publications = new Publication[MAX_PUBLICATION];
 
-
-    public void addBook(Book book) {
-        if (publicationsNumber < MAX_PUBLICATION) {
-            publications[publicationsNumber++] = book;
-        } else {
-            System.out.println("Maxymalna liczba książek została osiągnięta!");
+    public Publication[] getPublications() {
+        Publication[] result = new Publication[publicationsNumber];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = publications[i];
         }
+        return result;
     }
 
-    public void printBooks() {
-        int countBooks = 0;
-        for (int i = 0; i < publicationsNumber; i++) {
-            if (publications[i] instanceof Book) {
-                System.out.println(publications[i]);
-                countBooks++;
-            }
-        }
-        if (countBooks == 0) {
-            System.out.println("Brak książek w bibliotece");
-        }
-
+    public void addBook(Book book) {
+        addPublication(book);
     }
 
     public void addMagazine(Magazine magazine) {
-        if (publicationsNumber < MAX_PUBLICATION) {
-            publications[publicationsNumber++] = magazine;
-        } else {
-            System.out.println("Maxymalna liczba magazynow została osiągnięta!");
-        }
+        addPublication(magazine);
     }
 
-    public void printMagazines() {
-        int countMagazines = 0;
-        for (int i = 0; i < publicationsNumber; i++) {
-            if (publications[i] instanceof Magazine) {
-                System.out.println(publications[i]);
-                countMagazines++;
-            }
+    private void addPublication(Publication publication) {
+        if (publicationsNumber >= MAX_PUBLICATION) {
+            throw new ArrayIndexOutOfBoundsException("Max publication exceeded " + MAX_PUBLICATION);
         }
-        if (countMagazines == 0) {
-            System.out.println("Brak magazynów w bibliotece");
-        }
+        publications[publicationsNumber++] = publication;
+
     }
 }

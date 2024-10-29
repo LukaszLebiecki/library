@@ -2,7 +2,7 @@ package pl.lukaszlebiecki.library.app;
 
 class LibraryApp {
 
-    private static final String APP_NAME = "Biblioteka v1.3";
+    private static final String APP_NAME = "Biblioteka v1.5";
 
     public static void main(String[] args) {
 
