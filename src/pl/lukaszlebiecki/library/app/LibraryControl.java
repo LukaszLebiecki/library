@@ -1,8 +1,12 @@
 package pl.lukaszlebiecki.library.app;
 
+import pl.lukaszlebiecki.library.exception.DataExportException;
+import pl.lukaszlebiecki.library.exception.DataImportException;
 import pl.lukaszlebiecki.library.exception.NoSuchOptionException;
 import pl.lukaszlebiecki.library.io.ConsolePrinter;
 import pl.lukaszlebiecki.library.io.DataReader;
+import pl.lukaszlebiecki.library.io.file.FileManager;
+import pl.lukaszlebiecki.library.io.file.FileManagerBuilder;
 import pl.lukaszlebiecki.library.model.Book;
 import pl.lukaszlebiecki.library.model.Library;
 import pl.lukaszlebiecki.library.model.Magazine;
@@ -14,7 +18,20 @@ public class LibraryControl {
 
     private ConsolePrinter printer = new ConsolePrinter();
     private DataReader dataReader = new DataReader(printer);
-    private Library library = new Library();
+    private FileManager fileManager;
+    private Library library;
+
+    public LibraryControl() {
+        fileManager = new FileManagerBuilder(printer, dataReader).build();
+        try {
+            library = fileManager.importData();
+            printer.printLine("Zaimportowano dane z pliku");
+        } catch (DataImportException e) {
+            printer.printLine(e.getMessage());
+            printer.printLine("Zainicjowano nową bazę.");
+            library = new Library();
+        }
+    }
 
     public void controlLoop() {
         Option option;
@@ -37,7 +54,7 @@ public class LibraryControl {
     private Option getOption() {
         boolean optionOk = false;
         Option option = null;
-        while (!optionOk){
+        while (!optionOk) {
             try {
                 option = Option.createFromInt(dataReader.getInt());
                 optionOk = true;
@@ -66,7 +83,13 @@ public class LibraryControl {
         }
     }
 
-    private void exit(){
+    private void exit() {
+        try {
+            fileManager.exportData(library);
+            printer.printLine("Export danych do pliku zakończony powodzeniem");
+        } catch (DataExportException e) {
+            printer.printLine(e.getMessage());
+        }
         printer.printLine("Koniec programu, papa!");
         dataReader.close();
     }
