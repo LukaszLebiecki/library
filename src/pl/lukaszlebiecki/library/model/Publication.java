@@ -38,6 +38,8 @@ public abstract class Publication implements Serializable {
         this.publisher = publisher;
     }
 
+    public abstract String toCSV();
+
     @Override
     public String toString() {
         return title + "; " + publisher + "; " + year;
