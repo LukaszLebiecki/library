@@ -12,7 +12,9 @@ import pl.lukaszlebiecki.library.model.Book;
 import pl.lukaszlebiecki.library.model.Library;
 import pl.lukaszlebiecki.library.model.Magazine;
 import pl.lukaszlebiecki.library.model.Publication;
+import pl.lukaszlebiecki.library.model.comperator.AlphabeticalTitleComparator;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -72,7 +74,7 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        Publication[] publications = library.getPublications();
+        Publication[] publications = getSortedPublication();
         printer.printMagazines(publications);
     }
 
@@ -112,7 +114,7 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        Publication[] publications = library.getPublications();
+        Publication[] publications = getSortedPublication();
         printer.printBooks(publications);
     }
 
@@ -138,6 +140,12 @@ public class LibraryControl {
         } catch (InputMismatchException e) {
             printer.printLine("Niepoprawne dane");
         }
+    }
+
+    private Publication[] getSortedPublication() {
+        Publication[] publications = library.getPublications();
+        Arrays.sort(publications, new AlphabeticalTitleComparator());
+        return publications;
     }
 
     private void printOptions() {
