@@ -1,6 +1,7 @@
 package pl.lukaszlebiecki.library.io;
 
 import pl.lukaszlebiecki.library.model.Book;
+import pl.lukaszlebiecki.library.model.LibraryUser;
 import pl.lukaszlebiecki.library.model.Magazine;
 
 import java.util.Scanner;
@@ -44,6 +45,16 @@ public class DataReader {
         printer.printLine("Dzien");
         int day = getInt();
         return new Magazine(title, publisher, language, year, month, day );
+    }
+
+    public LibraryUser createLibraryUser() {
+        printer.printLine("Imię");
+        String firsName = sc.nextLine();
+        printer.printLine("Nazwisko");
+        String lastName = sc.nextLine();
+        printer.printLine("Pesel");
+        String pesel = sc.nextLine();
+        return new LibraryUser(firsName, lastName, pesel);
     }
 
     public int getInt() {

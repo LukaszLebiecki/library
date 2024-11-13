@@ -1,16 +1,19 @@
 package pl.lukaszlebiecki.library.io;
 
 import pl.lukaszlebiecki.library.model.Book;
+import pl.lukaszlebiecki.library.model.LibraryUser;
 import pl.lukaszlebiecki.library.model.Magazine;
 import pl.lukaszlebiecki.library.model.Publication;
 
+import java.util.Collection;
+
 public class ConsolePrinter {
 
-    public void printBooks(Publication[] publications) {
+    public void printBooks(Collection<Publication> publications) {
         int countBooks = 0;
         for (Publication publication : publications) {
             if (publication instanceof Book) {
-                System.out.println(publication);
+                printLine(publication.toString());
                 countBooks++;
             }
         }
@@ -20,16 +23,22 @@ public class ConsolePrinter {
 
     }
 
-    public void printMagazines(Publication[] publications) {
+    public void printMagazines(Collection<Publication> publications) {
         int countMagazines = 0;
         for (Publication publication : publications) {
             if (publication instanceof Magazine) {
-                System.out.println(publication);
+                printLine(publication.toString());
                 countMagazines++;
             }
         }
         if (countMagazines == 0) {
             printLine("Brak magazynów w bibliotece");
+        }
+    }
+
+    public void printUser(Collection<LibraryUser> users) {
+        for (LibraryUser user : users) {
+            printLine(user.toString());
         }
     }
 

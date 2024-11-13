@@ -1,20 +1,11 @@
 package pl.lukaszlebiecki.library.app;
 
-import pl.lukaszlebiecki.library.exception.DataExportException;
-import pl.lukaszlebiecki.library.exception.DataImportException;
-import pl.lukaszlebiecki.library.exception.InvalidDataException;
-import pl.lukaszlebiecki.library.exception.NoSuchOptionException;
+import pl.lukaszlebiecki.library.exception.*;
 import pl.lukaszlebiecki.library.io.ConsolePrinter;
 import pl.lukaszlebiecki.library.io.DataReader;
 import pl.lukaszlebiecki.library.io.file.FileManager;
 import pl.lukaszlebiecki.library.io.file.FileManagerBuilder;
-import pl.lukaszlebiecki.library.model.Book;
-import pl.lukaszlebiecki.library.model.Library;
-import pl.lukaszlebiecki.library.model.Magazine;
-import pl.lukaszlebiecki.library.model.Publication;
-import pl.lukaszlebiecki.library.model.comperator.AlphabeticalTitleComparator;
-
-import java.util.Arrays;
+import pl.lukaszlebiecki.library.model.*;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -49,11 +40,26 @@ public class LibraryControl {
                 case PRINTS_MAGAZINES -> printMagazines();
                 case DELETE_BOOKS -> deleteBook();
                 case DELETE_MAGAZINES -> deleteMagazine();
+                case ADD_USER -> addUser();
+                case PRINT_USER -> printUsers();
                 case EXIT -> exit();
                 default -> printer.printLine("Nie ma takiej opcji, wprowadź ponowanie.");
             }
         } while (option != Option.EXIT);
 
+    }
+
+    private void printUsers() {
+        printer.printUser(library.getUsers().values());
+    }
+
+    private void addUser() {
+        LibraryUser libraryUser = dataReader.createLibraryUser();
+        try {
+            library.addUser(libraryUser);
+        } catch (UserAlreadyExistsException e) {
+            printer.printLine(e.getMessage());
+        }
     }
 
 
@@ -74,8 +80,7 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        Publication[] publications = getSortedPublication();
-        printer.printMagazines(publications);
+        printer.printMagazines(library.getPublications().values());
     }
 
     private void addMagazine() {
@@ -114,8 +119,7 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        Publication[] publications = getSortedPublication();
-        printer.printBooks(publications);
+        printer.printBooks(library.getPublications().values());
     }
 
     private void addBook() {
@@ -142,19 +146,12 @@ public class LibraryControl {
         }
     }
 
-    private Publication[] getSortedPublication() {
-        Publication[] publications = library.getPublications();
-        Arrays.sort(publications, new AlphabeticalTitleComparator());
-        return publications;
-    }
-
     private void printOptions() {
         printer.printLine("Wybierz opcję:");
         for (Option value : Option.values()) {
             printer.printLine(value.toString());
         }
     }
-
 
     private enum Option {
         EXIT(0, "wyjście z programu"),
@@ -163,7 +160,9 @@ public class LibraryControl {
         PRINT_BOOKS(3, "wyświetl dostępne książki"),
         PRINTS_MAGAZINES(4, "wyświetl dostępne magazyny"),
         DELETE_BOOKS(5, "Usuń książkę"),
-        DELETE_MAGAZINES(6, "Usuń magazyn");
+        DELETE_MAGAZINES(6, "Usuń magazyn"),
+        ADD_USER(7, "Dodaj czytelnika"),
+        PRINT_USER(8, "Wyświetl czytelników");
 
         private final int value;
         private final String description;
