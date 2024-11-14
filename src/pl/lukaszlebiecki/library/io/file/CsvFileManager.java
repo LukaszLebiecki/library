@@ -7,6 +7,7 @@ import pl.lukaszlebiecki.library.model.*;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class CsvFileManager implements FileManager {
@@ -98,31 +99,25 @@ public class CsvFileManager implements FileManager {
 
     private void exportUsers(Library library) {
         Collection<LibraryUser> users = library.getUsers().values();
-        try (
-                var fw = new FileWriter(USERS_FILE_NAME);
-                var bw = new BufferedWriter(fw);
-        ) {
-            for (LibraryUser user : users) {
-                bw.write(user.toCsv());
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            throw new DataExportException("Błąd zapisu danych do pliku " + USERS_FILE_NAME);
-        }
+        exportToCsv(users, USERS_FILE_NAME);
     }
 
     private void exportPublications(Library library) {
         Collection<Publication> publications = library.getPublications().values();
+        exportToCsv(publications, FILE_NAME);
+    }
+
+    private<T extends CsvConvertible> void exportToCsv(Collection<T> collection, String fileName) {
         try (
-                var fw = new FileWriter(FILE_NAME);
+                var fw = new FileWriter(fileName);
                 var bw = new BufferedWriter(fw);
         ) {
-            for (Publication publication : publications) {
-                bw.write(publication.toCSV());
+            for (T colect : collection) {
+                bw.write(colect.toCsv());
                 bw.newLine();
             }
         } catch (IOException e) {
-            throw new DataExportException("Błąd zapisu danych do pliku " + FILE_NAME);
+            throw new DataExportException("Błąd zapisu danych do pliku " + fileName);
         }
     }
 }

@@ -3,7 +3,7 @@ package pl.lukaszlebiecki.library.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Publication implements Serializable {
+public abstract class Publication implements Serializable, CsvConvertible, Comparable<Publication> {
     private int year;
     private String title;
     private String publisher;
@@ -38,8 +38,6 @@ public abstract class Publication implements Serializable {
         this.publisher = publisher;
     }
 
-    public abstract String toCSV();
-
     @Override
     public String toString() {
         return title + "; " + publisher + "; " + year;
@@ -56,5 +54,10 @@ public abstract class Publication implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(year, title, publisher);
+    }
+
+    @Override
+    public int compareTo(Publication o) {
+        return title.compareTo(o.getTitle());
     }
 }
