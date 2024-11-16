@@ -6,6 +6,9 @@ import pl.lukaszlebiecki.library.io.DataReader;
 import pl.lukaszlebiecki.library.io.file.FileManager;
 import pl.lukaszlebiecki.library.io.file.FileManagerBuilder;
 import pl.lukaszlebiecki.library.model.*;
+import pl.lukaszlebiecki.library.model.comperator.AlphabeticalTitleComparator;
+
+import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -50,7 +53,12 @@ public class LibraryControl {
     }
 
     private void printUsers() {
-        printer.printUser(library.getUsers().values());
+        printer.printUser(library.getSortedUsers(new Comparator<LibraryUser>() {
+            @Override
+            public int compare(LibraryUser u1, LibraryUser u2) {
+                return u1.getLastName().compareToIgnoreCase(u2.getLastName());
+            }
+        }));
     }
 
     private void addUser() {
@@ -80,7 +88,7 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        printer.printMagazines(library.getPublications().values());
+        printer.printMagazines(library.getSortedPublication(new AlphabeticalTitleComparator()));
     }
 
     private void addMagazine() {
@@ -119,7 +127,7 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        printer.printBooks(library.getPublications().values());
+        printer.printBooks(library.getSortedPublication(new AlphabeticalTitleComparator()));
     }
 
     private void addBook() {
