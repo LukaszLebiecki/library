@@ -6,9 +6,7 @@ import pl.lukaszlebiecki.library.io.DataReader;
 import pl.lukaszlebiecki.library.io.file.FileManager;
 import pl.lukaszlebiecki.library.io.file.FileManagerBuilder;
 import pl.lukaszlebiecki.library.model.*;
-import pl.lukaszlebiecki.library.model.comperator.AlphabeticalTitleComparator;
 
-import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -53,12 +51,9 @@ public class LibraryControl {
     }
 
     private void printUsers() {
-        printer.printUser(library.getSortedUsers(new Comparator<LibraryUser>() {
-            @Override
-            public int compare(LibraryUser u1, LibraryUser u2) {
-                return u1.getLastName().compareToIgnoreCase(u2.getLastName());
-            }
-        }));
+        printer.printUser(library.getSortedUsers(
+                (u1, u2) -> u1.getLastName().compareToIgnoreCase(u2.getLastName())
+        ));
     }
 
     private void addUser() {
@@ -88,7 +83,9 @@ public class LibraryControl {
     }
 
     private void printMagazines() {
-        printer.printMagazines(library.getSortedPublication(new AlphabeticalTitleComparator()));
+        printer.printMagazines(library.getSortedPublication(
+                (p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle())
+        ));
     }
 
     private void addMagazine() {
@@ -127,7 +124,9 @@ public class LibraryControl {
     }
 
     private void printBooks() {
-        printer.printBooks(library.getSortedPublication(new AlphabeticalTitleComparator()));
+        printer.printBooks(library.getSortedPublication(
+                (p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle())
+        ));
     }
 
     private void addBook() {
