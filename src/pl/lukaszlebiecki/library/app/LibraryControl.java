@@ -7,6 +7,7 @@ import pl.lukaszlebiecki.library.io.file.FileManager;
 import pl.lukaszlebiecki.library.io.file.FileManagerBuilder;
 import pl.lukaszlebiecki.library.model.*;
 
+import java.util.Comparator;
 import java.util.InputMismatchException;
 
 public class LibraryControl {
@@ -52,7 +53,7 @@ public class LibraryControl {
 
     private void printUsers() {
         printer.printUser(library.getSortedUsers(
-                (u1, u2) -> u1.getLastName().compareToIgnoreCase(u2.getLastName())
+                Comparator.comparing(User::getLastName, String.CASE_INSENSITIVE_ORDER)
         ));
     }
 
@@ -84,7 +85,7 @@ public class LibraryControl {
 
     private void printMagazines() {
         printer.printMagazines(library.getSortedPublication(
-                (p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle())
+                Comparator.comparing(Publication::getTitle, String.CASE_INSENSITIVE_ORDER)
         ));
     }
 
@@ -125,7 +126,7 @@ public class LibraryControl {
 
     private void printBooks() {
         printer.printBooks(library.getSortedPublication(
-                (p1, p2) -> p1.getTitle().compareToIgnoreCase(p2.getTitle())
+                Comparator.comparing(Publication::getTitle, String.CASE_INSENSITIVE_ORDER)
         ));
     }
 
